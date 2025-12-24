@@ -44,6 +44,10 @@ export function VaultProvider({ children }: { children: ReactNode }) {
   
   const autoLockTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Debug: Log entries when they change
+
+  
+
   // Reset auto-lock timer on activity
   const resetAutoLockTimer = useCallback(() => {
     if (autoLockTimerRef.current) {
