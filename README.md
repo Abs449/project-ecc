@@ -9,11 +9,7 @@ A secure password manager built with Next.js, TypeScript, and Firebase, featurin
 - **PBKDF2 Key Derivation**: 100,000 iterations with SHA-256
 - **Zero-Knowledge Architecture**: Your master password never leaves your device
 - **Auto-Lock**: Vault automatically locks after 15 minutes of inactivity
-- **No Password Recovery**: By design - if you forget your master password, data is permanently 
-
-4. **Deploy Firestore security rules**:
-   - Go to Firebase Console → Firestore Database → Rules
-   - Copy the rules from `firestore.rules` and publish 
+- **No Password Recovery**: By design - if you forget your master password, data is permanently
 
 ## 🔐 How It Works
 
