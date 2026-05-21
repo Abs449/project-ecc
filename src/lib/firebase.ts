@@ -30,18 +30,33 @@ const validateConfig = () => {
 validateConfig();
 
 // Initialize Firebase only once
-let app: FirebaseApp;
-let auth: Auth;
-let db: Firestore;
+let app: FirebaseApp | undefined;
+let auth: Auth | undefined;
+let db: Firestore | undefined;
 
-try {
-  app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+const isConfigValid = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'your_api_key_here';
+
+if (getApps().length > 0) {
+  app = getApps()[0];
   auth = getAuth(app);
   db = getFirestore(app);
-} catch (error) {
-  console.error("Failed to initialize Firebase:", error);
-  // We re-throw so the app knows it's broken, but the Error Boundary will catch it now.
-  throw error;
+} else if (isConfigValid) {
+  try {
+    app = initializeApp(firebaseConfig);
+    auth = getAuth(app);
+    db = getFirestore(app);
+  } catch (error) {
+    console.error("Failed to initialize Firebase:", error);
+    // Don't throw during build to allow prerendering of static parts
+    if (typeof window !== 'undefined') {
+      throw error;
+    }
+  }
+} else {
+  // If we are in the browser and config is missing, warn the user
+  if (typeof window !== 'undefined') {
+    console.warn("Firebase configuration is missing. Authentication and database features will not work.");
+  }
 }
 
 export { auth, db };
