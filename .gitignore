@@ -41,3 +41,5 @@ yarn-error.log*
 next-env.d.ts
 # extension config
 extension/config.js
+# env file
+.env.local

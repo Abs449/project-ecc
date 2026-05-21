@@ -19,6 +19,9 @@ import { PasswordEntry } from './types';
  * @returns Array of encrypted password entries
  */
 export async function getPasswordEntries(userId: string): Promise<PasswordEntry[]> {
+  if (!db) {
+    throw new Error('Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     const entriesRef = collection(db, 'users', userId, 'passwords');
     const snapshot = await getDocs(entriesRef);
@@ -49,6 +52,9 @@ export async function addPasswordEntry(
   userId: string,
   entry: Omit<PasswordEntry, 'id'>
 ): Promise<string> {
+  if (!db) {
+    throw new Error('Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     const entriesRef = collection(db, 'users', userId, 'passwords');
     const docRef = await addDoc(entriesRef, {
@@ -77,6 +83,9 @@ export async function updatePasswordEntry(
   entryId: string,
   entry: Omit<PasswordEntry, 'id' | 'createdAt'>
 ): Promise<void> {
+  if (!db) {
+    throw new Error('Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     const entryRef = doc(db, 'users', userId, 'passwords', entryId);
     await updateDoc(entryRef, {
@@ -97,6 +106,9 @@ export async function updatePasswordEntry(
  * @param entryId - Entry document ID
  */
 export async function deletePasswordEntry(userId: string, entryId: string): Promise<void> {
+  if (!db) {
+    throw new Error('Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     const entryRef = doc(db, 'users', userId, 'passwords', entryId);
     await deleteDoc(entryRef);

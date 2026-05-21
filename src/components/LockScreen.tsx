@@ -37,6 +37,9 @@ export default function LockScreen() {
         const { getDoc, doc } = await import('firebase/firestore');
         const { db } = await import('@/lib/firebase');
         
+        if (!db) {
+          throw new Error('Database is not initialized. Please configure environment variables.');
+        }
         if (!user) throw new Error('Not authenticated');
         
         const configDoc = await getDoc(doc(db, 'users', user.uid, 'config', 'crypto'));

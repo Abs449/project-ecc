@@ -15,6 +15,9 @@ import { CryptoConfig } from './types';
  * @param masterPassword - Password for client-side encryption (not sent to Firebase Auth)
  */
 export async function signUp(email: string, accountPassword: string, masterPassword: string): Promise<void> {
+  if (!auth || !db) {
+    throw new Error('Firebase Auth or Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     // 1. Create user in Firebase Auth using the account password
     const userCredential = await createUserWithEmailAndPassword(auth, email, accountPassword);
@@ -47,6 +50,9 @@ export async function signUp(email: string, accountPassword: string, masterPassw
  * @returns The user's unique salt for key derivation
  */
 export async function signIn(email: string, accountPassword: string): Promise<string> {
+  if (!auth || !db) {
+    throw new Error('Firebase Auth or Firestore is not initialized. Please configure environment variables.');
+  }
   try {
     // 1. Sign in with Firebase Auth using the account password
     const userCredential = await signInWithEmailAndPassword(auth, email, accountPassword);
@@ -71,6 +77,9 @@ export async function signIn(email: string, accountPassword: string): Promise<st
  * Sign out the current user.
  */
 export async function signOut(): Promise<void> {
+  if (!auth) {
+    throw new Error('Firebase Auth is not initialized. Please configure environment variables.');
+  }
   try {
     await firebaseSignOut(auth);
   } catch (error: any) {
