@@ -29,9 +29,9 @@ export default function PasswordGenerator({ onUsePassword }: PasswordGeneratorPr
       console.error('Failed to generate password:', error);
       return '';
     }
+    // refreshCount is intentionally included to trigger manual regeneration
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [options, length, refreshCount]);
-
   // Derive strength from the generated password
   const strength = useMemo(() => calculatePasswordStrength(generatedPassword), [generatedPassword]);
 
@@ -80,7 +80,7 @@ export default function PasswordGenerator({ onUsePassword }: PasswordGeneratorPr
             🔄
           </button>
         </div>
-        
+
         {/* Strength indicator */}
         <div className="mt-2">
           <div className="flex justify-between items-center mb-1">
