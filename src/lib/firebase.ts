@@ -34,7 +34,7 @@ let app: FirebaseApp | undefined;
 let auth: Auth | undefined;
 let db: Firestore | undefined;
 
-const isConfigValid = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'AIzaSyCHBeEV24zkxXn1B9kL3bhtQhndU-1wGKQ';
+const isConfigValid = !!firebaseConfig.apiKey && firebaseConfig.apiKey !== 'your_api_key_here';
 
 if (getApps().length > 0) {
   try {
