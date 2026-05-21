@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useMemo } from 'react';
 import { generatePassword, calculatePasswordStrength } from '@/lib/crypto';
 import { PasswordGeneratorOptions } from '@/lib/types';
 
@@ -17,31 +17,27 @@ export default function PasswordGenerator({ onUsePassword }: PasswordGeneratorPr
     includeNumbers: true,
     includeSymbols: true,
   });
-  const [generatedPassword, setGeneratedPassword] = useState('');
-  const [strength, setStrength] = useState(0);
+  const [refreshCount, setRefreshCount] = useState(0);
   const [copied, setCopied] = useState(false);
 
-  // Generate password on mount and when options change
-  useEffect(() => {
+  // Derive password from options and length
+  // We use useMemo to avoid re-generating on every render, but allow manual refresh
+  const generatedPassword = useMemo(() => {
     try {
-      const newOptions = { ...options, length };
-      const password = generatePassword(newOptions);
-      setGeneratedPassword(password);
-      setStrength(calculatePasswordStrength(password));
+      return generatePassword({ ...options, length });
     } catch (error) {
       console.error('Failed to generate password:', error);
+      return '';
     }
-  }, [length, options]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [options, length, refreshCount]);
+
+  // Derive strength from the generated password
+  const strength = useMemo(() => calculatePasswordStrength(generatedPassword), [generatedPassword]);
 
   const handleRegenerate = () => {
-    try {
-      const password = generatePassword({ ...options, length });
-      setGeneratedPassword(password);
-      setStrength(calculatePasswordStrength(password));
-      setCopied(false);
-    } catch (error) {
-      console.error('Failed to generate password:', error);
-    }
+    setRefreshCount((prev) => prev + 1);
+    setCopied(false);
   };
 
   const handleCopy = async () => {
