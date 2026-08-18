@@ -31,7 +31,7 @@ export default function LockScreen() {
     } catch (err: any) {
       // For unlocking, we actually need to retrieve the salt differently
       // Let's implement a simpler approach using localStorage temporarily
-      
+
       try {
         // Get the user's salt from Firestore directly
         const { getDoc, doc } = await import('firebase/firestore');
@@ -41,12 +41,12 @@ export default function LockScreen() {
           throw new Error('Database is not initialized. Please configure environment variables.');
         }
         if (!user) throw new Error('Not authenticated');
-        
+
         const configDoc = await getDoc(doc(db, 'users', user.uid, 'config', 'crypto'));
         if (!configDoc.exists()) {
           throw new Error('Configuration not found');
         }
-        
+
         const config = configDoc.data();
         await unlockVault(masterPassword, config.salt);
       } catch (unlockError: any) {
